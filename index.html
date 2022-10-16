@@ -352,7 +352,9 @@
 							dl_button.prop('disabled', false);
 							button.button('reset')
 						
-						}).fail(function(){alert('An Error Occurred, you should refresh the page.')})
+						}).fail((jqXHR, textStatus, errorThrown) => {
+							alert(`An Error Occurred, you should refresh the page.\nText status: ${textStatus}\nError thrown: ${errorThrown}`);
+						})
 
 						$('#batchModal').modal('show');
 						view_batch(batch, batch_count);
