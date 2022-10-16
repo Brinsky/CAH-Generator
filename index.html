@@ -197,7 +197,7 @@
 
 			<h2>Tips</h2>
 			<ul class="tips">
-				<li>You can create up to 30 cards at a time (One card per line).</li>
+				<li>You can define one card per line.</li>
 				<li>Use a single _ to create a full underlined line.</li>
 				<li>Consecutive _'s can be used to customize underline length.</li>
 				<li>Use double quotes to quote things. Single quotes are turned into apostrophes.</li>
@@ -334,7 +334,7 @@
 					batch_count = text.val().split('\n').length;
 					
 					// Cards entered are valid
-					if (batch_count < 31 && text.val() !== "") {
+					if (text.val() !== "") {
 						button.button('loading');
 						$.ajax({
 							type: 'POST',
@@ -359,10 +359,6 @@
 						// No cards were entered
 						if (text.val() == "") {
 							$('<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><strong>Oh Snap!</strong> You didn\'t enter in any cards to generate, stupid.</div>').prependTo(form);
-						}
-						// Too many cards were entered
-						if (batch_count >= 31) {
-							$('<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><strong>Oh Snap!</strong> The generator can\'t make more than 30 cards at once. Learn to read.</div>').prependTo(form);
 						}
 					}
 					

@@ -106,7 +106,7 @@ $card_front_path = $cwd .'/img/';
 $card_front = "$card_color$mechanic.png";
 
 
-if ($batch != '' && $card_count < 31) {
+if ($batch != '') {
 	mkdir($path, 0775, true);
 	
 	if ($icon == 'custom-' && getimagesize($_FILES["customIcon"]["tmp_name"]) && move_uploaded_file($_FILES["customIcon"]["tmp_name"], $path . '/custom_icon_raw')) {
