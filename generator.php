@@ -20,6 +20,12 @@ $cwd = getcwd();
 $path = "$cwd/files/$batch";
 $coord = '1718,3494';
 
+// TODO: Generalize into input sanitization/fallback function
+$img_file_prefix = isset($_POST['img-file-prefix']) ? escapeshellcmd(preg_replace('/[^\w\-]/', '', $_POST['img-file-prefix'])) : '';
+if ($img_file_prefix == '') {
+	$img_file_prefix = $batch;
+}
+
 if ($_POST['card-color'] == 'black') {
 	$card_color = 'black';
 	$fill = 'white';
@@ -137,8 +143,10 @@ if ($batch != '') {
 		$text = str_replace ('\\\\x\\{201D\\}', '\\x{201D}', $text);
 		$text = str_replace ('\\\\x\\{2019\\}', '\\x{2019}', $text);
 		$text = str_replace ('\\\\n', '\\n', $text);
-		
-		exec('perl -e \'use utf8; binmode(STDOUT, ":utf8"); print "' . $text . '\n";\' | tee -a ' . $cwd . '/card_log.txt | convert ' . $card_front_path . $card_front . ' -page +444+444 -units PixelsPerInch -background ' . $card_color . ' -fill ' . $fill . ' -font ' . $cwd . '/fonts/HelveticaNeueBold.ttf -pointsize 15 -kerning -1 -density 1200 -size 2450x caption:@- -flatten ' . $path . '/temp.png; mv ' . $path . '/temp.png ' . $path . '/' . $batch . '_' . $i . '.png');
+
+		$padded_i = sprintf('%03d', $i);
+
+		exec('perl -e \'use utf8; binmode(STDOUT, ":utf8"); print "' . $text . '\n";\' | tee -a ' . $cwd . '/card_log.txt | convert ' . $card_front_path . $card_front . ' -page +444+444 -units PixelsPerInch -background ' . $card_color . ' -fill ' . $fill . ' -font ' . $cwd . '/fonts/HelveticaNeueBold.ttf -pointsize 15 -kerning -1 -density 1200 -size 2450x caption:@- -flatten ' . $path . '/temp.png; mv ' . $path . '/temp.png ' . $path . '/' . $img_file_prefix . '_' . $padded_i . '.png');
 	}
 
 	exec("cd $path; zip $batch.zip *.png");
